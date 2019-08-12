@@ -19,7 +19,18 @@ Route::resource('cosas', 'CosasController');
 
 Route::get('/', function () {
 
-	broadcast(new WebsocketDemoEvent('data'));
+	broadcast(new WebsocketDemoEvent('jesus'));
 
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/chat', 'ChatController@index');
+Route::get('/mensajes', 'ChatController@ObtenerMensajes');
+Route::post('/mensajes', 'ChatController@EnviarMensajes');
+
+
+

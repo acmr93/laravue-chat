@@ -10,11 +10,11 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class WebsocketDemoEvent implements ShouldBroadcast
+class MensajeEnviado implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-   
     public $data;
+
     /**
      * Create a new event instance.
      *
@@ -32,6 +32,6 @@ class WebsocketDemoEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('MiCanal');
+        return new Channel('CanalChat');
     }
 }
