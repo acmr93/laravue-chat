@@ -4,7 +4,7 @@
             <div class="card card-default">
                 <div class="card-header">Mensajes</div>
                 <div class="card-body">
-                    <ul class="list-unstyled" style="height: 300px; overflow-y: scroll;">
+                    <ul class="list-unstyled" style="height: 300px; overflow-y: scroll;" v-chat-scroll >
                         <li class="p-2" v-for="(mensaje, index) in mensajes" :key="index" >
                             <strong> {{mensaje.user.name}} </strong>
                             {{mensaje.valor}}
@@ -13,6 +13,7 @@
                     </ul>
                 </div>
                 <input 
+                    @keydown="sendTypingEvent"
                     @keyup.enter="EnviarMensajes"
                     v-model="NuevoMensaje"
                     type="text="
@@ -27,7 +28,9 @@
                 <div class="card-header">Usuarios Conectados</div>
                 <div class="card-body">
                     <ul>
-                        <li class="py-2">Angela</li>
+                        <li class="py-2" v-for="(user, index) in users" :key="index">
+                            {{user.name}}
+                        </li>
                     </ul>
                 </div>
                 
@@ -45,12 +48,30 @@
         data() {
             return {
                 mensajes: [], 
-                NuevoMensaje: ''
+                NuevoMensaje: '',
+                users: []
             }
         },
 
         created () {
             this.ObtenerMensajes();
+
+            Echo.join('CanalChat')
+                .here( user => {
+                    this.users = user;
+                })
+                .joining( user => {
+                    this.users.push(user)
+                })
+                .leaving( user => {
+                    this.users = this.users.filter( u => u.id != user.id )
+                })
+                .listen('MensajeEnviado', (event) => {
+                    this.mensajes.push(event.mensaje);
+                })
+                .listenForWhisper('probando', user => {
+                    console.log('malditasea');
+                })
         },
 
         methods: {
@@ -70,6 +91,10 @@
                 axios.post('mensajes', {valor: this.NuevoMensaje});
 
                 this.NuevoMensaje = '';
+            },
+
+            sendTypingEvent(){
+                Echo.join('CanalChat').whisper('probando', this.user);
             }
         }
 
