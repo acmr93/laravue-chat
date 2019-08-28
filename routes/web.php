@@ -15,7 +15,6 @@ use App\Events\WebsocketDemoEvent;
 
 
 
-Route::resource('cosas', 'CosasController');
 
 Route::get('/', function () {
 
