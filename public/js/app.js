@@ -1745,7 +1745,10 @@ __webpack_require__.r(__webpack_exports__);
     return {
       mensajes: [],
       NuevoMensaje: '',
-      users: []
+      users: [],
+      usuarioActivo: false,
+      susurro: '',
+      timeOut: false
     };
   },
   created: function created() {
@@ -1763,7 +1766,15 @@ __webpack_require__.r(__webpack_exports__);
     }).listen('MensajeEnviado', function (event) {
       _this.mensajes.push(event.mensaje);
     }).listenForWhisper('probando', function (user) {
-      console.log('malditasea');
+      _this.usuarioActivo = user.name;
+
+      if (_this.timeOut) {
+        clearTimeout(_this.timeOut);
+      }
+
+      _this.timeOut = setTimeout(function () {
+        _this.usuarioActivo = false;
+      }, 300);
     });
   },
   methods: {
@@ -47476,9 +47487,11 @@ var render = function() {
         })
       ]),
       _vm._v(" "),
-      _c("span", { staticClass: "text-muted" }, [
-        _vm._v("Fulanito esta escribiendo")
-      ])
+      _vm.usuarioActivo
+        ? _c("span", { staticClass: "text-muted" }, [
+            _vm._v(" " + _vm._s(_vm.usuarioActivo) + " esta escribiendo ")
+          ])
+        : _vm._e()
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "col-4" }, [
@@ -59749,7 +59762,7 @@ if (token) {
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
-  key: "AnyKey",
+  key: "anyKey",
   //cluster: process.env.MIX_PUSHER_APP_CLUSTER,
   //encrypted: true,
   wsHost: window.location.hostname,
@@ -59849,8 +59862,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\proyectos\blog\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\proyectos\blog\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\proyectos\laravue-chat\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\proyectos\laravue-chat\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

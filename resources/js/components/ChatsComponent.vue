@@ -21,7 +21,7 @@
                     name="mensaje"
                     placeholder="Escriba su mensaje...">
             </div>
-                <span class="text-muted">Fulanito esta escribiendo</span>
+                <span class="text-muted" v-if="usuarioActivo"> {{ usuarioActivo }} esta escribiendo </span>
         </div>
         <div class="col-4">
             <div class="card card-default">
@@ -49,7 +49,10 @@
             return {
                 mensajes: [], 
                 NuevoMensaje: '',
-                users: []
+                users: [],
+                usuarioActivo: false,
+                susurro:'',
+                timeOut: false
             }
         },
 
@@ -70,7 +73,15 @@
                     this.mensajes.push(event.mensaje);
                 })
                 .listenForWhisper('probando', user => {
-                    console.log('malditasea');
+                    this.usuarioActivo = user.name;
+
+                    if (this.timeOut) {
+                        clearTimeout(this.timeOut);
+                    }
+
+                    this.timeOut = setTimeout( () => {
+                        this.usuarioActivo = false;
+                    }, 300);
                 })
         },
 
